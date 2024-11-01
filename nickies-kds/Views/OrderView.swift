@@ -10,7 +10,7 @@ import SwiftUI
 struct OrderView: View {
   let orderView: Order
   @Environment(\.supabaseClient) private var supabaseClient
-  let onDone: (Int) -> Void // Closure to notify when done
+  let onDone: (Int) -> Void
   
   private func safeOrder() async {
     guard let orderId = orderView.id else {

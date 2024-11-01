@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  HomeScreen.swift
 //  nickies-kds
 //
 //  Created by Nik Uzair on 27/10/2024.
@@ -8,7 +8,7 @@
 import SwiftUI
 import Supabase
 
-struct ContentView: View {
+struct HomeScreen: View {
   
   @Environment(\.supabaseClient) private var supabaseClient
   @State private var listOrder: [Order] = []
@@ -69,8 +69,8 @@ struct ContentView: View {
     }
     
     if let index = listOrder.firstIndex(where: { $0.id == id }) {
-      listOrder[index].productId = productId // Update the productId
-      listOrder = listOrder // Trigger a view update
+      listOrder[index].productId = productId
+      listOrder = listOrder
     }
   }
   
@@ -81,7 +81,6 @@ struct ContentView: View {
           LazyVStack {
             ForEach(listOrder, id: \.id) { order in
               OrderView(orderView: order) { orderId in
-                // Remove the order with the given ID
                 if let index = listOrder.firstIndex(where: { $0.id == orderId }) {
                   listOrder.remove(at: index)
                 }
@@ -106,6 +105,6 @@ struct ContentView: View {
 }
 
 #Preview {
-  ContentView()
+  HomeScreen()
     .environment(\.supabaseClient, .development)
 }
