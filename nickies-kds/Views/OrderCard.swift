@@ -1,5 +1,5 @@
 //
-//  OrderView.swift
+//  OrderCard.swift
 //  nickies-kds
 //
 //  Created by Nik Uzair on 27/10/2024.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct OrderView: View {
+struct OrderCard: View {
   let orderView: Order
   @Environment(\.supabaseClient) private var supabaseClient
   let onDone: (Int) -> Void
@@ -49,7 +49,6 @@ struct OrderView: View {
           .font(.subheadline)
           .foregroundColor(.secondary)
       }
-      
       Button(action: {
         Task {
           await safeOrder()
@@ -74,10 +73,10 @@ struct OrderView: View {
 
 
 #Preview {
-    let productID1 = UUID(uuidString: "00000000-0000-0000-0000-000000000002")!
-
-    OrderListView(orderList: [
-        Order(id: 1, productId: productID1)
-    ])
-    .environment(\.supabaseClient, .development)
+  let productID1 = UUID(uuidString: "00000000-0000-0000-0000-000000000002")!
+  
+  OrderListView(orderList: [
+    Order(id: 1, productId: productID1)
+  ])
+  .environment(\.supabaseClient, .development)
 }

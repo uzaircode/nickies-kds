@@ -13,7 +13,7 @@ struct OrderListView: View {
   var body: some View {
     VStack {
       ForEach(orderList) { list in
-        OrderView(orderView: list) { orderId in
+        OrderCard(orderView: list) { orderId in
           if let index = orderList.firstIndex(where: { $0.id == orderId }) {
             orderList.remove(at: index)
           }

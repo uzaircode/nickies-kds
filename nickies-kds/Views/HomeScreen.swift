@@ -80,7 +80,7 @@ struct HomeScreen: View {
         ScrollView {
           LazyVStack {
             ForEach(listOrder, id: \.id) { order in
-              OrderView(orderView: order) { orderId in
+              OrderCard(orderView: order) { orderId in
                 if let index = listOrder.firstIndex(where: { $0.id == orderId }) {
                   listOrder.remove(at: index)
                 }
