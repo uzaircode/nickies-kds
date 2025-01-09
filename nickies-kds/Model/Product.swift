@@ -8,7 +8,7 @@
 import Foundation
 
 struct Product: Codable, Identifiable {
-  var id: UUID
-  var name: String
-  var price: Double
+  var id: Int
+  let name: String
+  let price: Double
 }

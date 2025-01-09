@@ -1,82 +1,43 @@
-//
-//  OrderCard.swift
-//  nickies-kds
-//
-//  Created by Nik Uzair on 27/10/2024.
-//
-
 import SwiftUI
+import Supabase
 
 struct OrderCard: View {
-  let orderView: Order
-  @Environment(\.supabaseClient) private var supabaseClient
-  let onDone: (Int) -> Void
+  let orderId: Int  // Only the order ID is needed now
+  let onDone: (Int) -> Void  // Closure to handle the "Done" button action
   
-  private func safeOrder() async {
-    guard let orderId = orderView.id else {
-      print("Order ID is missing")
-      return
-    }
-    
-    let updatedText = "done"
-    
-    do {
-      try await supabaseClient
-        .from("orders")
-        .update(["text": updatedText])
-        .eq("id", value: orderId)
-        .execute()
-      
-      // Call the closure to remove the order after updating
-      onDone(orderId) // Notify that the order is done
-    } catch {
-      print("Failed to update order:", error)
-    }
-  }
+  @Environment(\.supabaseClient) private var supabaseClient
+  @State private var orderItems: [OrderItems] = []
+  @State private var products: [Product] = []
   
   var body: some View {
     VStack(alignment: .leading, spacing: 8) {
-      Text(orderView.productId.uuidString)
-        .font(.headline)
-        .foregroundColor(.primary)
-      
-      if let orderId = orderView.id {
-        Text("Order ID: \(orderId)")
-          .font(.subheadline)
-          .foregroundColor(.secondary)
-      } else {
-        Text("Order ID: Unavailable")
-          .font(.subheadline)
-          .foregroundColor(.secondary)
-      }
-      Button(action: {
-        Task {
-          await safeOrder()
+      ForEach(orderItems, id: \.id) { orderItem in
+        if let product = products.first(where: { $0.id == orderItem.productId }) {
+          HStack {
+            Text(product.name)
+              .font(.headline)
+          }
+          .padding(.vertical, 4)
+        } else {
+          Text("Product not found")
+            .font(.headline)
+            .foregroundColor(.red)
         }
-      }) {
-        Text("Done")
-          .fontWeight(.bold)
-          .frame(maxWidth: .infinity)
-          .padding()
-          .background(Color.blue)
-          .foregroundColor(.white)
-          .cornerRadius(8)
       }
     }
-    .padding()
+    Button(action: {
+    }) {
+      Text("Done")
+        .fontWeight(.bold)
+        .frame(maxWidth: .infinity)
+        .padding()
+        .background(Color.blue)
+        .foregroundColor(.white)
+        .cornerRadius(8)
+    }
+    .padding(.top, 8)
     .background(RoundedRectangle(cornerRadius: 12)
       .fill(Color.white)
       .shadow(radius: 1))
-    .padding(.horizontal)
   }
-}
-
-
-#Preview {
-  let productID1 = UUID(uuidString: "00000000-0000-0000-0000-000000000002")!
-  
-  OrderListView(orderList: [
-    Order(id: 1, productId: productID1)
-  ])
-  .environment(\.supabaseClient, .development)
 }
